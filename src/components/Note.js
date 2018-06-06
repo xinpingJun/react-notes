@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Editor from "./Editor";
 import moment from "moment";
 import "moment/locale/zh-cn";
-import {loadCollection,db} from '../database'
+import { loadCollection , db} from '../database'
 import _ from "loadsh";
 moment.locale("zh-CN");
 class Note extends Component {
@@ -10,7 +10,8 @@ class Note extends Component {
     entity: this.props.entity,
     body: this.props.entity.body,
     updated: this.props.entity.meta.updated || this.props.entity.created,
-    open: false
+    open: false,
+    destroyEntity:this.props.destroyEntity
   };
   updated() {
     return moment(this.state.updated).fromNow();
@@ -29,8 +30,10 @@ class Note extends Component {
       }
     })
   }
+
+
   updateEntity = (event) =>{
-    const _body = event.targer.value
+    const _body = event.target.value
     this.setState({
       body:_body
     })
@@ -38,7 +41,7 @@ class Note extends Component {
     .then((collection)=>{
       const entity = this.state.entity
       entity.body = _body
-      collection.updated(entity)
+      collection.update(entity)
       db.saveDatabase()
     })
   }
@@ -49,9 +52,9 @@ class Note extends Component {
         <div className="content">
           <div className="header" onClick={this.toggle}>{this.header()}</div>
           <div className="extra">
-            {this.state.open && <Editor  entity={this.state.entity} updateEntity={this.updateEntity} />}
+            {this.state.open && <Editor  entity={this.state.entity}  updateEntity={this.updateEntity} />}
             {this.words()}字
-            {this.state.open && <i className="right floated trash  icon" />}
+            {this.state.open && <i className="right floated trash  icon"  onClick={()=>this.state.destroyEntity(this.state.entity)} />}
           </div>
         </div>
       </div>
