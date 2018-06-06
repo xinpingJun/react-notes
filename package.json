@@ -1,6 +1,7 @@
 {
   "name": "notes",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "dependencies": {
     "loadsh": "^1.0.1",
